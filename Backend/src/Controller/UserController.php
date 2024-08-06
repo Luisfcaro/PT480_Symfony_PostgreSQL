@@ -81,7 +81,7 @@ class UserController extends AbstractController
             ], Response::HTTP_CREATED);
 
         } catch(\Exception $e) {
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
 
@@ -126,7 +126,7 @@ class UserController extends AbstractController
             return new JsonResponse(['token' => $bearer], Response::HTTP_OK);
 
         }catch(\Exception $e){
-            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
     }
