@@ -25,6 +25,7 @@ CREATE TABLE Wines (
 
 -- Create the Measurements table
 CREATE TABLE Measurements (
+    Id SERIAL PRIMARY KEY,
     Year INT NOT NULL,
     Sensor_id INT NOT NULL,
     Wine_id INT NOT NULL,
@@ -32,7 +33,6 @@ CREATE TABLE Measurements (
     Temperature FLOAT,
     Graduation FLOAT,
     Ph FLOAT,
-    PRIMARY KEY (Year, Sensor_id, Wine_id),
     FOREIGN KEY (Sensor_id) REFERENCES Sensors(Id),
     FOREIGN KEY (Wine_id) REFERENCES Wines(Id)
 );
