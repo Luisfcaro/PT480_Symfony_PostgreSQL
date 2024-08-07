@@ -171,4 +171,133 @@ class WineController extends AbstractController
             return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
         }
     }
+
+    #[Route('api/wines', name: 'get_wines', methods: ['GET'])]
+    #[OA\Get(
+        path: "/api/wines",
+        summary: "Find all wines",
+        tags: ["Wine Management"],
+        description: "Retrieves all wines and his measurements",
+        parameters: [
+            new OA\Parameter(
+                name: "Token",
+                in: "header",
+                description: "Authentication token required for access.",
+                required: true,
+                schema: new OA\Schema(
+                    type: "string",
+                    example: "your-authentication-token"
+                )
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Wine created successfully",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(
+                            property: "wines",
+                            type: "object",
+                            properties: [
+                                new OA\Property(
+                                    property: "id",
+                                    type: "int",
+                                    example: "1"
+                                ),
+                                new OA\Property(
+                                    property: "name",
+                                    type: "string",
+                                    example: "The one"
+                                ),
+                                new OA\Property(
+                                    property: "year",
+                                    type: "int",
+                                    example: "2003"
+                                ),
+                                new OA\Property(
+                                    property: "measurements",
+                                    type: "object",
+                                    properties: [
+                                        new OA\Property(
+                                            property: "id",
+                                            type: "int",
+                                            example: "2"
+                                        ),
+                                        new OA\Property(
+                                            property: "year",
+                                            type: "int",
+                                            example: "2004"
+                                        ),
+                                        new OA\Property(
+                                            property: "sensor_id",
+                                            type: "int",
+                                            example: "2"
+                                        ),
+                                        new OA\Property(
+                                            property: "wine_id",
+                                            type: "int",
+                                            example: "1"
+                                        ),           new OA\Property(
+                                            property: "color",
+                                            type: "string",
+                                            example: "red"
+                                        ),           new OA\Property(
+                                            property: "temperature",
+                                            type: "float",
+                                            example: "29.2"
+                                        ),
+                                        new OA\Property(
+                                            property: "graduation",
+                                            type: "float",
+                                            example: "1.1"
+                                        ),
+                                        new OA\Property(
+                                            property: "ph",
+                                            type: "float",
+                                            example: "0.3"
+                                        ),
+                                    ]
+                                ),
+                            ]
+                        )
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 500,
+                description: "Internal servr error",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(
+                            property: "error",
+                            type: "string",
+                            example: "Something unexpected happenned"
+                        )
+                    ]
+                )
+            ),
+        ]
+    )]
+    public function get_wines(Request $request) : JsonResponse {
+        try {
+
+            $wines = $this->wineRepository->findAll();
+
+            $data = [];
+            foreach ($wines as $wine) {
+                $data[] = $wine->toArrayMeasurements();
+            }
+
+            return new JsonResponse([
+                'wines' => $data 
+            ], 200);
+
+            
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
+        }
+    }
 }

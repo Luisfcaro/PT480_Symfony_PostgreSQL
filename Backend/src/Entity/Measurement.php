@@ -138,4 +138,17 @@ class Measurement
             'ph' => $this->ph,
         ];
     }
+
+    public function toArrayWithIds(): array {
+        return [
+            'id' => $this->getId(),
+            'year' => $this->getYear(),
+            'sensor_id' => $this->getSensorId() ? $this->getSensorId()->getId() : null,
+            'wine_id' => $this->getWineId() ? $this->getWineId()->getId() : null,
+            'color' => $this->getColor(),
+            'temperature' => $this->getTemperature(),
+            'graduation' => $this->getGraduation(),
+            'ph' => $this->ph,
+        ];
+    }
 }

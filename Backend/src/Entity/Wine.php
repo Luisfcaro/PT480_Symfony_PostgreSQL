@@ -98,4 +98,15 @@ class Wine
             'year' => $this->getYear()
         ];
     }
+
+    public function toArrayMeasurements(): array {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'year' => $this->getYear(),
+            'measurements' => array_map(function($measurement) {
+                return $measurement->toArrayWithIds();
+            }, $this->getMeasurements()->toArray())
+        ];
+    }
 }
