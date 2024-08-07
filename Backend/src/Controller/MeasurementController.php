@@ -98,13 +98,40 @@ class MeasurementController extends AbstractController
                                 ),
                                 new OA\Property(
                                     property: "sensor_id",
-                                    type: "int",
-                                    example: "2"
+                                    type: "object",
+                                    properties: [
+                                        new OA\Property(
+                                            property: "id",
+                                            type: "int",
+                                            example: "3"
+                                        ),
+                                        new OA\Property(
+                                            property: "name",
+                                            type: "string",
+                                            example: "Termperature Sensor"
+                                        ),
+                                    ]
                                 ),
                                 new OA\Property(
                                     property: "wine_id",
-                                    type: "int",
-                                    example: "1"
+                                    type: "object",
+                                    properties: [
+                                        new OA\Property(
+                                            property: "id",
+                                            type: "int",
+                                            example: "6"
+                                        ),
+                                        new OA\Property(
+                                            property: "name",
+                                            type: "string",
+                                            example: "The Second"
+                                        ),
+                                        new OA\Property(
+                                            property: "year",
+                                            type: "int",
+                                            example: "2004"
+                                        ),
+                                    ]
                                 ),
                                 new OA\Property(
                                     property: "color",
