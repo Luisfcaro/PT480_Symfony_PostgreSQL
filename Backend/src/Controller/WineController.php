@@ -116,8 +116,8 @@ class WineController extends AbstractController
                 )
             ),
             new OA\Response(
-                response: 401,
-                description: "Unauthorized, wine already exists",
+                response: 409,
+                description: "Conflict",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
@@ -152,7 +152,7 @@ class WineController extends AbstractController
             $wine_exist = $this->wineRepository->findOneBy(['name' => $wine_data['name'], 'year' => $wine_data['year']]);
 
             if($wine_exist){
-                throw new \Exception("There already exits a wine with that name and year of production", 401);
+                throw new \Exception("There already exits a wine with that name and year of production", 409);
                 
             }
 
@@ -164,7 +164,7 @@ class WineController extends AbstractController
 
             return new JsonResponse([
                 'message' => 'Wine created successfully',
-                'sensor' => $wine->toArray()
+                'wine' => $wine->toArray()
             ], Response::HTTP_CREATED);
 
         } catch (\Exception $e) {

@@ -124,4 +124,18 @@ class Measurement
 
         return $this;
     }
+
+
+    public function toArray(): array {
+        return [
+            'id' => $this->getId(),
+            'year' => $this->getYear(),
+            'sensor_id' => $this->getSensorId() ? $this->getSensorId()->toArray() : null,
+            'wine_id' => $this->getWineId() ? $this->getWineId()->toArray() : null,
+            'color' => $this->getColor(),
+            'temperature' => $this->getTemperature(),
+            'graduation' => $this->getGraduation(),
+            'ph' => $this->ph,
+        ];
+    }
 }

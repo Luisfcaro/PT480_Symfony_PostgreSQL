@@ -78,8 +78,8 @@ class Sensor
 
     public function toArray(): array {
         return [
-            'id' => $this->id,
-            'name' => $this->name
+            'id' => $this->getId(),
+            'name' => $this->getName()
         ];
     }
 }

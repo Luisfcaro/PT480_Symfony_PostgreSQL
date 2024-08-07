@@ -111,7 +111,7 @@ class SensorController extends AbstractController
                 )
             ),
             new OA\Response(
-                response: 401,
+                response: 409,
                 description: "Conflict, sensor with the same name already exists",
                 content: new OA\JsonContent(
                     type: "object",
@@ -138,7 +138,7 @@ class SensorController extends AbstractController
             $sensor_exist = $this->sensorRepository->findOneBy(['name' => $sensor_data['name']]);
 
             if ($sensor_exist) {
-                throw new \Exception("Sensor with that name already exist", 401);
+                throw new \Exception("Sensor with that name already exist", 409);
             }
 
             $sensor = new Sensor();

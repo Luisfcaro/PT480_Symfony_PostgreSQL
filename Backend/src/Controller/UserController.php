@@ -81,7 +81,7 @@ class UserController extends AbstractController
                 )
             ),
             new OA\Response(
-                response: 401,
+                response: 409,
                 description: "User with email already exist",
                 content: new OA\JsonContent(
                     type: "object",
@@ -113,7 +113,7 @@ class UserController extends AbstractController
             $user_exist = $this->UserRepository->findOneBy(['email' => $data['email']]);
 
             if ($user_exist){
-                throw new \Exception('User with this mail already exists', 401);
+                throw new \Exception('User with this mail already exists', 409);
             }
 
             $user = new User();
@@ -184,7 +184,7 @@ class UserController extends AbstractController
                 )
             ),
             new OA\Response(
-                response: 403,
+                response: 400,
                 description: "Missing fields on request body",
                 content: new OA\JsonContent(
                     type: "object",
@@ -210,7 +210,7 @@ class UserController extends AbstractController
             }
 
             if (!empty($missingFields)) {
-                throw new \Exception('Missing fields: ' . implode(', ', $missingFields), 403);
+                throw new \Exception('Missing fields: ' . implode(', ', $missingFields), 400);
             }
 
             $user = $this->UserRepository->findOneBy(['email' => $data['email']]);
