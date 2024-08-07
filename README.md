@@ -18,7 +18,7 @@ Locate the pt480.sql file in the project directory. Import this SQL file into yo
 
 ### 2. Configure the Database Connection
 
-Update the .env file in the project root with your PostgreSQL credentials. Set the DATABASE_URL as follows:
+Update the .env file in the Backend directory with your PostgreSQL credentials. Set the DATABASE_URL as follows:
 
 ```
 DATABASE_URL="postgresql://user:password@127.0.0.1:5432/pt480?serverVersion=16&charset=utf8"
@@ -29,6 +29,9 @@ Replace user and password with your PostgreSQL username and password, respective
 ## 3 Install Dependencies
 
 Run the following command to install the project dependencies:
+```bash
+cd Backend/
+```
 
 ```bash
 composer install
