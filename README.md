@@ -2,6 +2,13 @@
 
 Welcome to the PT480 Symfony PostgreSQL project. Follow the steps below to set up and run the project on your local machine.
 
+## Prerequisites
+
+- PHP 8.3.*
+- Symfony CLI v5.10.*
+
+This proyect has been coded with Symfony 7.1 and PHP 8.2
+
 ## 1. Clone the Repository
 
 Start by cloning the repository with the following command:
