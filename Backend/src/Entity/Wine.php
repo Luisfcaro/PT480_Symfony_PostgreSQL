@@ -90,4 +90,12 @@ class Wine
 
         return $this;
     }
+
+    public function toArray(): array {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'year' => $this->year
+        ];
+    }
 }

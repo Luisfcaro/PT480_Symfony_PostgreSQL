@@ -16,7 +16,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 
 use OpenApi\Attributes as OA;
-use Symfony\Component\Routing\Annotation\Route as AnnotationRoute;
 
 class UserController extends AbstractController
 {
@@ -134,7 +133,7 @@ class UserController extends AbstractController
             ], Response::HTTP_CREATED);
 
         } catch(\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
         }
 
     }
@@ -205,7 +204,7 @@ class UserController extends AbstractController
             $requiredFields = ['email', 'password'];
 
             foreach ($requiredFields as $field) {
-                if (!isset($data[$field])) {
+                if (!isset($data[$field]) || $data[$field] == "" || $data[$field] === null) {
                     $missingFields[] = $field;
                 }
             }
@@ -234,7 +233,7 @@ class UserController extends AbstractController
             return new JsonResponse(['token' => $bearer], Response::HTTP_OK);
 
         }catch(\Exception $e){
-            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
         }
 
     }

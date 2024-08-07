@@ -155,7 +155,7 @@ class SensorController extends AbstractController
 
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
         }
 
     }
@@ -278,7 +278,7 @@ class SensorController extends AbstractController
                 'sensors' => $data
             ]);
         } catch (\Exception $e) {
-            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+            return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
         }
 
     }
