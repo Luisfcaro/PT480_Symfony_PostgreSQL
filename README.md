@@ -46,8 +46,8 @@ symfony server:start
 
 Once the server is running, you can view the API documentation:
 
-Swagger UI: http://localhost:8000/api/doc
-Swagger JSON: http://localhost:8000/api/doc.json
+ - Swagger UI: http://localhost:8000/api/doc
+ - Swagger JSON: http://localhost:8000/api/doc.json
 
 ## 6. Test the API
 
