@@ -16,6 +16,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 
 use OpenApi\Attributes as OA;
+use Symfony\Component\Routing\Annotation\Route as AnnotationRoute;
 
 class UserController extends AbstractController
 {
@@ -72,7 +73,7 @@ class UserController extends AbstractController
             ),
             new OA\Response(
                 response: 400,
-                description: "Bad request",
+                description: "Missing fields on request body",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
@@ -82,7 +83,7 @@ class UserController extends AbstractController
             ),
             new OA\Response(
                 response: 401,
-                description: "Bad request",
+                description: "User with email already exist",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
@@ -107,13 +108,13 @@ class UserController extends AbstractController
             }
 
             if (!empty($missingFields)) {
-                throw new \Exception('Missing fields: ' . implode(', ', $missingFields));
+                throw new \Exception('Missing fields: ' . implode(', ', $missingFields), 400);
             }
 
             $user_exist = $this->UserRepository->findOneBy(['email' => $data['email']]);
 
             if ($user_exist){
-                throw new \Exception('User with this mail already exists');
+                throw new \Exception('User with this mail already exists', 401);
             }
 
             $user = new User();
@@ -165,7 +166,7 @@ class UserController extends AbstractController
             ),
             new OA\Response(
                 response: 401,
-                description: "Unauthorized",
+                description: "No user with that email",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
@@ -175,7 +176,7 @@ class UserController extends AbstractController
             ),
             new OA\Response(
                 response: 402,
-                description: "Unauthorized",
+                description: "Incorrect Password",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
@@ -185,7 +186,7 @@ class UserController extends AbstractController
             ),
             new OA\Response(
                 response: 403,
-                description: "Unauthorized",
+                description: "Missing fields on request body",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
@@ -210,17 +211,17 @@ class UserController extends AbstractController
             }
 
             if (!empty($missingFields)) {
-                throw new \Exception('Missing fields: ' . implode(', ', $missingFields));
+                throw new \Exception('Missing fields: ' . implode(', ', $missingFields), 403);
             }
 
             $user = $this->UserRepository->findOneBy(['email' => $data['email']]);
 
             if (!$user) {
-                throw new \Exception('User not found');
+                throw new \Exception('User not found', 401);
             }
 
             if (!$this->passwordHasher->isPasswordValid($user, $data['password'])) {
-                throw new \Exception('Invalid password');
+                throw new \Exception('Invalid password', 402);
             }
 
             $bearer = $this->jwtEncoder->encode([
