@@ -26,14 +26,16 @@ class MiddlewareAuthListener {
     }
 
 
-    public function onKernelRequest(RequestEvent $event) {
+    public function onKernelRequest(RequestEvent $event)
+    {
         $request = $event->getRequest();
+        $route = $request->attributes->get('_route');
 
-        if (!$this->RouteUnlocked($request)) {
-
-            try {
-
-                if (!$request->headers->has('Token')) {  
+        if ($this->RouteUnlocked($route)){
+           return;
+        } else {
+            try{
+                if (!$request->headers->has('Token')) {
                     throw new AuthenticationCredentialsNotFoundException("No token found");
                 } else {
                     $token = $request->headers->get('Token');
@@ -42,23 +44,18 @@ class MiddlewareAuthListener {
                 }
 
                 if (!$user) {
-                    throw new Exception("User not found");
+                    throw new \Exception("User not found");
                 }
-
-
             } catch (\Exception $e) {
                 $event->setResponse(new JsonResponse(['error' => $e->getMessage()], 401));
             }
-
         }
 
     }
 
-    public function RouteUnlocked($request){
-        $route = $request->attributes->get('_route');
-        $UnlockedRoutes = ['login', 'register'];
-
-        return in_array($route, $UnlockedRoutes);
+    public function RouteUnlocked($route){
+        $unlockedRoutes = ['login', 'register', 'app.swagger', 'app.swagger_ui'];
+        return in_array($route, $unlockedRoutes);
     }
 
 
