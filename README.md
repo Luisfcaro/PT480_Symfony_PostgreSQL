@@ -9,7 +9,7 @@ Welcome to the PT480 Symfony PostgreSQL project. Follow the steps below to set u
 
 ## E-R Diagram
 
-https://raw.githubusercontent.com/Luisfcaro/PT480_Symfony_PostgreSQL/main/Backend/public/E-R_ÑPT480.png
+https://raw.githubusercontent.com/Luisfcaro/PT480_Symfony_PostgreSQL/main/Backend/public/E-R_PT480.png
 
 This proyect has been coded with Symfony 7.1 and PHP 8.2
 
