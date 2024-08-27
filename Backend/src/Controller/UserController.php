@@ -2,46 +2,29 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
-
+use App\Service\User\UserServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
-
 use OpenApi\Attributes as OA;
+use App\DTO\User\RegisterUserDTO;
+use App\DTO\User\LoginUserDTO;
 
 class UserController extends AbstractController
 {
-
-    private $jwtEncoder;
-    private $UserRepository;
-    private $passwordHasher;
-    private $entityManager;
+    private $userService;
 
     public function __construct(
 
-        UserPasswordHasherInterface $passwordHasher,
-        JWTEncoderInterface $jwtEncoder,
-        UserRepository $userRepository,
-        EntityManagerInterface $entityManager,
+        UserServiceInterface $userService
 
     ){
 
-        $this->passwordHasher = $passwordHasher;
-        $this->jwtEncoder = $jwtEncoder;
-        $this->UserRepository = $userRepository;
-        $this->entityManager = $entityManager;
+        $this->userService = $userService;
 
     }
-
-
 
     #[Route('api/register', name: 'register', methods: ['POST'])]
     #[OA\Post(
@@ -76,7 +59,7 @@ class UserController extends AbstractController
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
-                        new OA\Property(property: "error", type: "string", example: "Missing fields: name, surname, ...")
+                        new OA\Property(property: "error", type: "string", example: "Validation failed: Field '[name]': This value should not be blank., ...")
                     ]
                 )
             ),
@@ -97,36 +80,13 @@ class UserController extends AbstractController
         try {
             $data = json_decode($request->getContent(), true);
 
-            $requiredFields = ['name', 'surname', 'email', 'password'];
-            $missingFields = [];
+            $registerUserDTO = new RegisterUserDTO();
+            $registerUserDTO->setName($data['name']);
+            $registerUserDTO->setSurname($data['surname']);
+            $registerUserDTO->setEmail($data['email']);
+            $registerUserDTO->setPassword($data['password']);
 
-            foreach ($requiredFields as $field) {
-                if (!isset($data[$field])) {
-                    $missingFields[] = $field;
-                }
-            }
-
-            if (!empty($missingFields)) {
-                throw new \Exception('Missing fields: ' . implode(', ', $missingFields), 400);
-            }
-
-            $user_exist = $this->UserRepository->findOneBy(['email' => $data['email']]);
-
-            if ($user_exist){
-                throw new \Exception('User with this mail already exists', 409);
-            }
-
-            $user = new User();
-            $user->setName($data['name']);
-            $user->setSurname($data['surname']);
-            $user->setEmail($data['email']);
-            $hashedPassword = $this->passwordHasher->hashPassword($user, $data['password']);
-            $user->setPassword($hashedPassword);
-            
-
-            $this->entityManager->persist($user);
-
-            $this->entityManager->flush();
+            $this->userService->registerUser($registerUserDTO);
 
             return new JsonResponse([
                 'message' => 'User registered successfully',
@@ -135,7 +95,6 @@ class UserController extends AbstractController
         } catch(\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
         }
-
     }
 
     #[Route('api/login', name: 'login', methods: ['POST'])]
@@ -185,11 +144,11 @@ class UserController extends AbstractController
             ),
             new OA\Response(
                 response: 400,
-                description: "Missing fields on request body",
+                description: "Missing fields or validation failed",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
-                        new OA\Property(property: "error", type: "string", example: "Missing Fields: ...")
+                        new OA\Property(property: "error", type: "string", example: "Validation failed: Field '[email]': This value is not a valid email address.")
                     ]
                 )
             )
@@ -197,44 +156,19 @@ class UserController extends AbstractController
     )]
     public function login(Request $request): JsonResponse
     {
-
         try {
             $data = json_decode($request->getContent(), true);
 
-            $requiredFields = ['email', 'password'];
+            $loginUserDTO = new LoginUserDTO();
+            $loginUserDTO->setEmail($data['email']);
+            $loginUserDTO->setPassword($data['password']);
 
-            foreach ($requiredFields as $field) {
-                if (!isset($data[$field]) || $data[$field] == "" || $data[$field] === null) {
-                    $missingFields[] = $field;
-                }
-            }
-
-            if (!empty($missingFields)) {
-                throw new \Exception('Missing fields: ' . implode(', ', $missingFields), 400);
-            }
-
-            $user = $this->UserRepository->findOneBy(['email' => $data['email']]);
-
-            if (!$user) {
-                throw new \Exception('User not found', 401);
-            }
-
-            if (!$this->passwordHasher->isPasswordValid($user, $data['password'])) {
-                throw new \Exception('Invalid password', 402);
-            }
-
-            $bearer = $this->jwtEncoder->encode([
-                'email' => $user->getEmail(),
-                'exp' => time() + (60 * 60), // 1 hour expiration
-            ]);
-
-            
+            $bearer = $this->userService->logUser($loginUserDTO);
 
             return new JsonResponse(['token' => $bearer], Response::HTTP_OK);
 
         }catch(\Exception $e){
             return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
         }
-
     }
 }
