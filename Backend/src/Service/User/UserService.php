@@ -24,8 +24,8 @@ class UserService implements UserServiceInterface
     private $passwordHasher;
     private $entityManager;
 
-    public function __construct(
-
+    public function __construct
+    (
         UserPasswordHasherInterface $passwordHasher,
         JWTEncoderInterface $jwtEncoder,
         UserRepository $userRepository,
@@ -33,9 +33,8 @@ class UserService implements UserServiceInterface
         LogValidator $logValidator,
         UserMapper $userMapper,
         EntityManagerInterface $entityManager,
-
-    ){
-
+    )
+    {
         $this->passwordHasher = $passwordHasher;
         $this->jwtEncoder = $jwtEncoder;
         $this->userRepository = $userRepository;
@@ -43,7 +42,6 @@ class UserService implements UserServiceInterface
         $this->logValidator = $logValidator;
         $this->userMapper = $userMapper;
         $this->entityManager = $entityManager;
-
     }
 
     public function registerUser(RegisterUserDTO $registerUserDTO)
@@ -57,7 +55,7 @@ class UserService implements UserServiceInterface
         }
 
         $user = $this->userMapper->registerDtoToEntity($registerUserDTO);
-        $hashedPassword = $this->passwordHasher->hashPassword($user, $registerUserDTO['password']);
+        $hashedPassword = $this->passwordHasher->hashPassword($user, $registerUserDTO->getPassword());
         $user->setPassword($hashedPassword);
 
         $this->entityManager->persist($user);

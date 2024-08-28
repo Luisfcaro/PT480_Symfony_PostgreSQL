@@ -2,37 +2,36 @@
 
 namespace App\Controller;
 
-use App\Entity\Sensor;
-use App\Repository\SensorRepository;
-
+use App\Service\Sensor\SensorServiceInterface;
+use App\DTO\Sensor\CreateSensorDTO;
+use App\DTO\Sensor\GetAllSensorByNameDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+use Symfony\Component\Serializer\SerializerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use OpenApi\Attributes as OA;
 
 class SensorController extends AbstractController
 {
-
-    private $sensorRepository;
+    private $sensorService;
+    private $sensorSerializer;
     private $entityManager;
 
     public function __construct(
-
-        SensorRepository $sensorRepository,
+        SensorServiceInterface $sensorService,
+        SerializerInterface $sensorSerializer,
         EntityManagerInterface $entityManager,
-
-    ){
-
-        $this->sensorRepository = $sensorRepository;
+    )
+    {
+        $this->sensorService = $sensorService;
+        $this->sensorSerializer = $sensorSerializer;
         $this->entityManager = $entityManager;
-
     }
 
-    #[Route('api/sensor', name: 'create_sensor', methods: ['POST'])]
+    #[Route('api/sensor', name: 'createSensor', methods: ['POST'])]
     #[OA\Post(
         path: "/api/sensor",
         summary: "Create a new sensor",
@@ -126,33 +125,21 @@ class SensorController extends AbstractController
             )
         ]
     )]
-    public function create_sensor(Request $request): JsonResponse {
-
+    public function createSensor(Request $request): JsonResponse
+    {
         try {
-            $sensor_data = json_decode($request->getContent(), true);
+            $sensorData = json_decode($request->getContent(), true);
 
-            if (!isset($sensor_data['name']) || ($sensor_data['name'] == null) || ($sensor_data['name'] == "")){
-                throw new \Exception('The sensor needs a name');
-            }
+            $createSensorDTO = new CreateSensorDTO();
+            $createSensorDTO->setName($sensorData['name']);
 
-            $sensor_exist = $this->sensorRepository->findOneBy(['name' => $sensor_data['name']]);
+            $sensor = $this->sensorService->createSensor($createSensorDTO);
 
-            if ($sensor_exist) {
-                throw new \Exception("Sensor with that name already exist", 409);
-            }
-
-            $sensor = new Sensor();
-            $sensor->setName($sensor_data['name']);
-
-            $this->entityManager->persist($sensor);
-            $this->entityManager->flush();
-
+            $serializedSensor = json_decode($this->sensorSerializer->serialize($sensor, 'json'));
 
             return new JsonResponse([
-
                 'message' => 'Sensor created successfully',
-                'sensor' => $sensor->toArray()
-
+                'sensor' => $serializedSensor
             ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
@@ -160,9 +147,9 @@ class SensorController extends AbstractController
 
     }
 
-    #[Route('api/sensors_name', name: 'find_sensors_by_name', methods: ['GET'])]
+    #[Route('api/allSensorByName', name: 'allSensorByName', methods: ['GET'])]
     #[OA\Get(
-        path: "/api/sensors_name",
+        path: "/api/allSensorByName",
         summary: "Find sensors by name with sorting",
         tags: ["Sensor Management"],
         description: "Retrieve a list of sensors ordered by name. The 'order' query parameter specifies the sorting order. Set 'order' to 0 for ascending and to 1 for descending. The 'Token' header is required for authentication.",
@@ -247,39 +234,32 @@ class SensorController extends AbstractController
             )
         ]
     )]
-    public function find_sensors_by_name(Request $request): JsonResponse {
-
+    public function getAllSensorByName(Request $request): JsonResponse
+    {
         try {
-
             /* JsonDecode can intrepet 0 and 1 as null, for that reason, we get the query param as an string */
-            $order = $request->query->get('order');
+            $orderData = $request->query->get('order');
 
-            /* We make sure that order is not null, and that the value provided on the string is a number */
-            if($order === null || !is_numeric($order)) {
-                throw new \Exception("Order needs to be specified on query", 400);
+            if ($orderData === null) {
+                throw new \Exception("Order param needs to be specified", 401);
             }
 
-            /* We convert the string value to an int value */
-            $order = intval($order);
+            $getAllSensorByNameDTO = new GetAllSensorByNameDTO();
+            $getAllSensorByNameDTO->setOrder($orderData);
 
-            /* Verifies that order is setted to 0 or 1 */
-            if(($order !== 0) && ($order !== 1)){
-                throw new \Exception("Order needs to be 0 or 1", 401);
-            }
+            $sensors = $this->sensorService->getAllSensorByName($getAllSensorByNameDTO);
 
-            $sensors = $this->sensorRepository->find_sensors_by_name($order);
-            $data = [];
+            $sensorsSerialized = [];
 
             foreach($sensors as $sensor){
-                $data[] = $sensor->toArray();
+                $sensorsSerialized[] = json_decode($this->sensorSerializer->serialize($sensor, 'json'));
             }
     
             return new JsonResponse([
-                'sensors' => $data
+                'sensors' => $sensorsSerialized
             ]);
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
         }
-
     }
 }

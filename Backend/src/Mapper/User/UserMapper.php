@@ -12,7 +12,7 @@ class UserMapper
     {
         $user = new User();
         $user->setEmail($registerUserDTO->getEmail());
-        $user->setPassword($registerUserDTO->getPassword()); // Asumimos que se encripta más adelante
+        $user->setPassword($registerUserDTO->getPassword());
         $user->setName($registerUserDTO->getName());
         $user->setSurname($registerUserDTO->getSurname());
 
