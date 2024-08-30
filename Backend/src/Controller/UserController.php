@@ -17,13 +17,9 @@ class UserController extends AbstractController
     private $userService;
 
     public function __construct(
-
         UserServiceInterface $userService
-
     ){
-
         $this->userService = $userService;
-
     }
 
     #[Route('api/register', name: 'register', methods: ['POST'])]

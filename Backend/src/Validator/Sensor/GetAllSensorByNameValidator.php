@@ -46,7 +46,7 @@ class GetAllSensorByNameValidator
                 $errorMessages[] = sprintf("Field '%s': %s", $propertyPath, $message);
             }
     
-            throw new \Exception("Validation failed: " . implode(", ", $errorMessages), 400);
+            throw new \Exception("Validation failed: " . implode(", ", $errorMessages), 401);
         }
     }
 }

@@ -11,24 +11,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use OpenApi\Attributes as OA;
 
 class SensorController extends AbstractController
 {
     private $sensorService;
     private $sensorSerializer;
-    private $entityManager;
 
     public function __construct(
         SensorServiceInterface $sensorService,
         SerializerInterface $sensorSerializer,
-        EntityManagerInterface $entityManager,
     )
     {
         $this->sensorService = $sensorService;
         $this->sensorSerializer = $sensorSerializer;
-        $this->entityManager = $entityManager;
     }
 
     #[Route('api/sensor', name: 'createSensor', methods: ['POST'])]
@@ -104,7 +100,7 @@ class SensorController extends AbstractController
                         new OA\Property(
                             property: "error",
                             type: "string",
-                            example: "The sensor needs a name"
+                            example: "Validation failed: Field [name]: Needs to be something"
                         )
                     ]
                 )
@@ -227,7 +223,7 @@ class SensorController extends AbstractController
                         new OA\Property(
                             property: "error",
                             type: "string",
-                            example: "Order needs to be 0 or 1"
+                            example: "Validation failed: Field [order]: Order needs a value"
                         )
                     ]
                 )
@@ -237,11 +233,10 @@ class SensorController extends AbstractController
     public function getAllSensorByName(Request $request): JsonResponse
     {
         try {
-            /* JsonDecode can intrepet 0 and 1 as null, for that reason, we get the query param as an string */
             $orderData = $request->query->get('order');
 
             if ($orderData === null) {
-                throw new \Exception("Order param needs to be specified", 401);
+                throw new \Exception("Order needs to be specified on query", 400);
             }
 
             $getAllSensorByNameDTO = new GetAllSensorByNameDTO();

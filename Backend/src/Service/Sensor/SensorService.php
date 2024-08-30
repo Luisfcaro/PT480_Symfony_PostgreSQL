@@ -2,7 +2,6 @@
 
 namespace App\Service\Sensor;
 
-use App\Entity\Sensor;
 use App\Repository\SensorRepository;
 use App\Service\Sensor\SensorServiceInterface;
 use App\Validator\Sensor\CreateSensorValidator;
@@ -20,8 +19,7 @@ class SensorService implements SensorServiceInterface
     private $entityManager;
     private $getAllSensorByNameValidator;
 
-    public function __construct
-    (
+    public function __construct(
         CreateSensorValidator $createSensorValidator,
         SensorRepository $sensorRepository,
         SensorMapper $sensorMapper,
@@ -40,9 +38,9 @@ class SensorService implements SensorServiceInterface
     {
         $this->createSensorValidator->validateCreateSensorData($createSensorDTO);
 
-        $sensor_exist = $this->sensorRepository->findOneBy(['name' => $createSensorDTO->getName()]);
+        $sensorExist = $this->sensorRepository->findOneBy(['name' => $createSensorDTO->getName()]);
 
-        if ($sensor_exist) {
+        if ($sensorExist) {
             throw new \Exception("Sensor with that name already exist", 409);
         }
 

@@ -4,7 +4,6 @@ namespace App\Service\User;
 
 use App\DTO\User\LoginUserDTO;
 use App\DTO\User\RegisterUserDTO;
-use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Validator\User\RegisterValidator;
 use App\Validator\User\LogValidator;
@@ -24,8 +23,7 @@ class UserService implements UserServiceInterface
     private $passwordHasher;
     private $entityManager;
 
-    public function __construct
-    (
+    public function __construct(
         UserPasswordHasherInterface $passwordHasher,
         JWTEncoderInterface $jwtEncoder,
         UserRepository $userRepository,
