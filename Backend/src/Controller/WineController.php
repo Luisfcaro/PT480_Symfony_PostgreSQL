@@ -2,37 +2,30 @@
 
 namespace App\Controller;
 
-use App\Entity\Wine;
-use App\Repository\WineRepository;
-
+use App\Service\Wine\WineServiceInterface;
+use App\DTO\Wine\CreateWineDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use OpenApi\Attributes as OA;
 
 class WineController extends AbstractController
 {
-
-    private $wineRepository;
-    private $entityManager;
+    private $wineService;
+    private $wineSerializer;
 
     public function __construct(
-
-        WineRepository $wineRepository,
-        EntityManagerInterface $entityManager,
-
+        WineServiceInterface $wineService,
+        SerializerInterface $wineSerializer,
     ){
-
-        $this->wineRepository = $wineRepository;
-        $this->entityManager = $entityManager;
-
+        $this->wineService = $wineService;
+        $this->wineSerializer = $wineSerializer;
     }
 
-    #[Route('api/wine', name: 'create_wine', methods: ['POST'])]
+    #[Route('api/wine', name: 'createWine', methods: ['POST'])]
     #[OA\Post(
         path: "/api/wine",
         summary: "Create a new wine",
@@ -131,40 +124,22 @@ class WineController extends AbstractController
             )
         ]
     )]
-    public function create_wine(Request $request): JsonResponse
+    public function createWine(Request $request): JsonResponse
     {
         try {
-            $wine_data = json_decode($request->getContent(), true);
+            $wineData = json_decode($request->getContent(), true);
 
-            $requiredFields = ['name', 'year'];
-            $missingFields = [];
+            $createWineDTO = new CreateWineDTO();
+            $createWineDTO->setName($wineData['name']);
+            $createWineDTO->setYear($wineData['year']);
 
-            foreach ($requiredFields as $field) {
-                if (!isset($wine_data[$field]) || $wine_data[$field] == "" || $wine_data[$field] === null) {
-                    $missingFields[] = $field;
-                }
-            }
+            $wine = $this->wineService->createWine($createWineDTO);
 
-            if (!empty($missingFields)) {
-                throw new \Exception('Missing fields: ' . implode(', ', $missingFields), 400);
-            }
-
-            $wine_exist = $this->wineRepository->findOneBy(['name' => $wine_data['name'], 'year' => $wine_data['year']]);
-
-            if($wine_exist){
-                throw new \Exception("There already exits a wine with that name and year of production", 409);
-                
-            }
-
-            $wine = new Wine();
-            $wine->setName($wine_data['name']);
-            $wine->setYear($wine_data['year']);
-            $this->entityManager->persist($wine);
-            $this->entityManager->flush();
+            $serializedWine = json_decode($this->wineSerializer->serialize($wine, 'json'));
 
             return new JsonResponse([
                 'message' => 'Wine created successfully',
-                'wine' => $wine->toArray()
+                'wine' => $serializedWine
             ], Response::HTTP_CREATED);
 
         } catch (\Exception $e) {
@@ -172,10 +147,10 @@ class WineController extends AbstractController
         }
     }
 
-    #[Route('api/wines', name: 'get_wines', methods: ['GET'])]
+    #[Route('api/winesWithMeasurements', name: 'getWinesWithMeasurements', methods: ['GET'])]
     #[OA\Get(
-        path: "/api/wines",
-        summary: "Find all wines",
+        path: "/api/winesWithMeasurements",
+        summary: "Find all wines with its measurements",
         tags: ["Wine Management"],
         description: "Retrieves all wines and his measurements",
         parameters: [
@@ -281,21 +256,17 @@ class WineController extends AbstractController
             ),
         ]
     )]
-    public function get_wines(Request $request) : JsonResponse {
+    public function getWinesWithMeasurements(Request $request) : JsonResponse
+    {
         try {
 
-            $wines = $this->wineRepository->findAll();
+            $wines = $this->wineService->findAllWineWithITSMeasurements();
 
-            $data = [];
-            foreach ($wines as $wine) {
-                $data[] = $wine->toArrayMeasurements();
-            }
+            $winesSerialized = json_decode($this->wineSerializer->serialize($wines, 'json'));
 
             return new JsonResponse([
-                'wines' => $data 
+                'wines' => $winesSerialized
             ], 200);
-
-            
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
         }
