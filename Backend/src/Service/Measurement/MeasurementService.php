@@ -8,8 +8,6 @@ use App\Service\Measurement\MeasurementServiceInterface;
 use App\Repository\MeasurementRepository;
 use App\Repository\SensorRepository;
 use App\Repository\WineRepository;
-use App\Mapper\Sensor\SensorMapper;
-use App\Mapper\Wine\WineMapper;
 use App\Mapper\Measurement\MeasurementMapper;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -19,8 +17,6 @@ class MeasurementService implements MeasurementServiceInterface
     private $sensorRepository;
     private $measurementRepository;
     private $wineRepository;
-    private $sensorMapper;
-    private $wineMapper;
     private $measurementMapper;
     private $entityManager;
 
@@ -29,8 +25,6 @@ class MeasurementService implements MeasurementServiceInterface
         MeasurementRepository $measurementRepository,
         SensorRepository $sensorRepository,
         WineRepository $wineRepository,
-        SensorMapper $sensorMapper,
-        WineMapper $wineMapper,
         MeasurementMapper $measurementMapper,
         EntityManagerInterface $entityManager
     )
@@ -39,8 +33,6 @@ class MeasurementService implements MeasurementServiceInterface
         $this->measurementRepository = $measurementRepository;
         $this->sensorRepository = $sensorRepository;
         $this->wineRepository = $wineRepository;
-        $this->sensorMapper = $sensorMapper;
-        $this->wineMapper = $wineMapper;
         $this->measurementMapper = $measurementMapper;
         $this->entityManager = $entityManager;
     }
@@ -56,16 +48,12 @@ class MeasurementService implements MeasurementServiceInterface
             throw new \Exception('Sensor referenced does not exist', 409);
         }
 
-        $sensorDTO = $this->sensorMapper->entityToSensorDTO($sensor);
-
         $wine = $this->wineRepository->findOneBy(['id' => $createMeasurementDTO->getWineId()]);
 
         if (!$wine)
         {
             throw new \Exception('Wine referenced does not exist', 409);
         }
-
-        $wineDTO = $this->wineMapper->entityToWineDTO($wine);
 
         if ($createMeasurementDTO->getYear() < $wine->getYear())
         {
