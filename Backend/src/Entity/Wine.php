@@ -82,7 +82,6 @@ class Wine
     public function removeMeasurement(Measurement $measurement): static
     {
         if ($this->measurements->removeElement($measurement)) {
-            // set the owning side to null (unless already changed)
             if ($measurement->getWineId() === $this) {
                 $measurement->setWineId(null);
             }
