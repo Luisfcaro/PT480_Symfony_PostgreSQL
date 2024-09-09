@@ -46,7 +46,6 @@ class WineService implements WineServiceInterface
 
         if($wineExist){
             throw new \Exception("There already exits a wine with that name and year of production", 409);
-            
         }
 
         $wine = $this->wineMapper->createWineDTOToEntity($createWineDTO);
