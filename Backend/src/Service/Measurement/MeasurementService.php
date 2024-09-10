@@ -45,14 +45,14 @@ class MeasurementService implements MeasurementServiceInterface
 
         if (!$sensor)
         {
-            throw new \Exception('Sensor referenced does not exist', 409);
+            throw new \Exception('Sensor referenced does not exists', 409);
         }
 
         $wine = $this->wineRepository->findOneBy(['id' => $createMeasurementDTO->getWineId()]);
 
         if (!$wine)
         {
-            throw new \Exception('Wine referenced does not exist', 409);
+            throw new \Exception('Wine referenced does not exists', 409);
         }
 
         if ($createMeasurementDTO->getYear() < $wine->getYear())

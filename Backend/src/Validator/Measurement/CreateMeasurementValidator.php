@@ -20,6 +20,7 @@ class CreateMeasurementValidator
         $constraints = new Assert\Collection([
             'year' => [
                 new Assert\NotBlank(),
+                new Assert\NotNull(),
                 new Assert\Type([
                     'type' => 'int',
                     'message' => 'Year has to be an {{ type }} value'
@@ -27,6 +28,7 @@ class CreateMeasurementValidator
             ],
             'sensorId' => [
                 new Assert\NotBlank(),
+                new Assert\NotNull(),
                 new Assert\Type([
                     'type' => 'int',
                     'message' => 'SensorId has to be an {{ type }} value'
@@ -34,6 +36,7 @@ class CreateMeasurementValidator
             ],
             'wineId' => [
                 new Assert\NotBlank(),
+                new Assert\NotNull(),
                 new Assert\Type([
                     'type' => 'int',
                     'message' => 'WineId has to be an {{ type }} value'
@@ -41,6 +44,7 @@ class CreateMeasurementValidator
             ],
             'color' => [
                 new Assert\NotBlank(),
+                new Assert\NotNull(),
                 new Assert\Type([
                     'type' => 'string',
                     'message' => 'Color has to be an {{ type }} value'
@@ -48,6 +52,7 @@ class CreateMeasurementValidator
             ],
             'temperature' => [
                 new Assert\NotBlank(),
+                new Assert\NotNull(),
                 new Assert\Type([
                     'type' => 'float',
                     'message' => 'Temperature has to be an {{ type }} value'
@@ -55,6 +60,7 @@ class CreateMeasurementValidator
             ],
             'graduation' => [
                 new Assert\NotBlank(),
+                new Assert\NotNull(),
                 new Assert\Type([
                     'type' => 'float',
                     'message' => 'Graduation has to be an {{ type }} value'
@@ -62,6 +68,7 @@ class CreateMeasurementValidator
             ],
             'ph' => [
                 new Assert\NotBlank(),
+                new Assert\NotNull(),
                 new Assert\Type([
                     'type' => 'float',
                     'message' => 'Ph has to be an {{ type }} value'

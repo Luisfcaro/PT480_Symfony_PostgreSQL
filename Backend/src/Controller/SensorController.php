@@ -140,7 +140,6 @@ class SensorController extends AbstractController
         } catch (\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
         }
-
     }
 
     #[Route('api/allSensorByName', name: 'allSensorByName', methods: ['GET'])]
@@ -251,6 +250,7 @@ class SensorController extends AbstractController
             }
     
             return new JsonResponse([
+                'message' => 'Sensors founded',
                 'sensors' => $sensorsSerialized
             ]);
         } catch (\Exception $e) {

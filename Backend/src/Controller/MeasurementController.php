@@ -191,13 +191,13 @@ class MeasurementController extends AbstractController
             $measurementData = json_decode($request->getContent(), true);
 
             $createMeasurementDTO = new CreateMeasurementDTO();
-            $createMeasurementDTO->setYear($measurementData['year']);
-            $createMeasurementDTO->setSensorId($measurementData['sensor_id']);
-            $createMeasurementDTO->setWineId($measurementData['wine_id']);
-            $createMeasurementDTO->setColor($measurementData['color']);
-            $createMeasurementDTO->setTemperature($measurementData['temperature']);
-            $createMeasurementDTO->setGraduation($measurementData['graduation']);
-            $createMeasurementDTO->setPh($measurementData['ph']);
+            $createMeasurementDTO->setYear($measurementData['year'] ?? null);
+            $createMeasurementDTO->setSensorId($measurementData['sensor_id'] ?? null);
+            $createMeasurementDTO->setWineId($measurementData['wine_id'] ?? null);
+            $createMeasurementDTO->setColor($measurementData['color'] ?? null);
+            $createMeasurementDTO->setTemperature($measurementData['temperature'] ?? null);
+            $createMeasurementDTO->setGraduation($measurementData['graduation'] ?? null);
+            $createMeasurementDTO->setPh($measurementData['ph'] ?? null);
 
             $measurement = $this->measurementService->createMeasurement($createMeasurementDTO);
 

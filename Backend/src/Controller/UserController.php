@@ -161,7 +161,10 @@ class UserController extends AbstractController
 
             $bearer = $this->userService->logUser($loginUserDTO);
 
-            return new JsonResponse(['token' => $bearer], Response::HTTP_OK);
+            return new JsonResponse([
+                'message' => 'User logged',
+                'token' => $bearer
+            ], Response::HTTP_OK);
 
         }catch(\Exception $e){
             return new JsonResponse(['error' => $e->getMessage()], $e->getCode());

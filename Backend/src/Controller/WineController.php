@@ -265,6 +265,7 @@ class WineController extends AbstractController
             $winesSerialized = json_decode($this->wineSerializer->serialize($wines, 'json'));
 
             return new JsonResponse([
+                'message' => 'Wines founded',
                 'wines' => $winesSerialized
             ], 200);
         } catch (\Exception $e) {

@@ -41,7 +41,7 @@ class SensorService implements SensorServiceInterface
         $sensorExist = $this->sensorRepository->findOneBy(['name' => $createSensorDTO->getName()]);
 
         if ($sensorExist) {
-            throw new \Exception("Sensor with that name already exist", 409);
+            throw new \Exception("Sensor with that name already exists", 409);
         }
 
         $sensor = $this->sensorMapper->createSensorDtoToEntity($createSensorDTO);
