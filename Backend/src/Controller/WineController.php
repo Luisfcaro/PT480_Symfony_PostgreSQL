@@ -130,8 +130,8 @@ class WineController extends AbstractController
             $wineData = json_decode($request->getContent(), true);
 
             $createWineDTO = new CreateWineDTO();
-            $createWineDTO->setName($wineData['name']);
-            $createWineDTO->setYear($wineData['year']);
+            $createWineDTO->setName($wineData['name'] ?? null);
+            $createWineDTO->setYear($wineData['year'] ?? null);
 
             $wine = $this->wineService->createWine($createWineDTO);
 

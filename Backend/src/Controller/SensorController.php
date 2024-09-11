@@ -127,7 +127,7 @@ class SensorController extends AbstractController
             $sensorData = json_decode($request->getContent(), true);
 
             $createSensorDTO = new CreateSensorDTO();
-            $createSensorDTO->setName($sensorData['name']);
+            $createSensorDTO->setName($sensorData['name'] ?? null);
 
             $sensor = $this->sensorService->createSensor($createSensorDTO);
 

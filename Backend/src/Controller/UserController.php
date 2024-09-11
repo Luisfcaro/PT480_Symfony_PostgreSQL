@@ -77,10 +77,10 @@ class UserController extends AbstractController
             $data = json_decode($request->getContent(), true);
 
             $registerUserDTO = new RegisterUserDTO();
-            $registerUserDTO->setName($data['name']);
-            $registerUserDTO->setSurname($data['surname']);
-            $registerUserDTO->setEmail($data['email']);
-            $registerUserDTO->setPassword($data['password']);
+            $registerUserDTO->setName($data['name'] ?? null);
+            $registerUserDTO->setSurname($data['surname'] ?? null);
+            $registerUserDTO->setEmail($data['email'] ?? null);
+            $registerUserDTO->setPassword($data['password'] ?? null);
 
             $this->userService->registerUser($registerUserDTO);
 
@@ -156,8 +156,8 @@ class UserController extends AbstractController
             $data = json_decode($request->getContent(), true);
 
             $loginUserDTO = new LoginUserDTO();
-            $loginUserDTO->setEmail($data['email']);
-            $loginUserDTO->setPassword($data['password']);
+            $loginUserDTO->setEmail($data['email'] ?? null);
+            $loginUserDTO->setPassword($data['password'] ?? null);
 
             $bearer = $this->userService->logUser($loginUserDTO);
 
