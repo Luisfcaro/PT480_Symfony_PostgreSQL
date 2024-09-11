@@ -103,7 +103,7 @@ class WineController extends AbstractController
                         new OA\Property(
                             property: "error",
                             type: "string",
-                            example: "Missing fields: name, year"
+                            example: "Validation Failed: Field [name] ..."
                         )
                     ]
                 )
@@ -168,10 +168,15 @@ class WineController extends AbstractController
         responses: [
             new OA\Response(
                 response: 200,
-                description: "Wine created successfully",
+                description: "Wines Founded",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
+                        new OA\Property(
+                            property: "message",
+                            type: "string",
+                            example: "Wines founded"
+                        ),
                         new OA\Property(
                             property: "wines",
                             type: "object",
@@ -242,7 +247,7 @@ class WineController extends AbstractController
             ),
             new OA\Response(
                 response: 500,
-                description: "Internal servr error",
+                description: "Internal server error",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
@@ -259,7 +264,6 @@ class WineController extends AbstractController
     public function getWinesWithMeasurements(Request $request) : JsonResponse
     {
         try {
-
             $wines = $this->wineService->findAllWineWithITSMeasurements();
 
             $winesSerialized = json_decode($this->wineSerializer->serialize($wines, 'json'));

@@ -51,7 +51,7 @@ class UserController extends AbstractController
             ),
             new OA\Response(
                 response: 400,
-                description: "Missing fields on request body",
+                description: "Missing fields on request body or validation failed",
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
@@ -114,6 +114,11 @@ class UserController extends AbstractController
                 content: new OA\JsonContent(
                     type: "object",
                     properties: [
+                        new OA\Property(
+                            property: "message",
+                            type: "string",
+                            example: "User logged"
+                        ),
                         new OA\Property(property: "token", type: "string", example: "your-jwt-token")
                     ]
                 )

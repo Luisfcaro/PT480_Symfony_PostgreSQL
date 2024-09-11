@@ -178,6 +178,11 @@ class SensorController extends AbstractController
                     type: "object",
                     properties: [
                         new OA\Property(
+                            property: "message",
+                            type: "string",
+                            example: "Sensors founded"
+                        ),
+                        new OA\Property(
                             property: "sensors",
                             type: "array",
                             items: new OA\Items(

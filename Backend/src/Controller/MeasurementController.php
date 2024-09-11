@@ -67,7 +67,11 @@ class MeasurementController extends AbstractController
                 content: new OA\JsonContent(
                     type: 'object',
                     properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Measurement created successfully'),
+                        new OA\Property(
+                            property: 'message',
+                            type: 'string',
+                            example: 'Measurement created successfully'
+                        ),
                         new OA\Property(
                             property: "sensor",
                             type: "object",
@@ -149,7 +153,7 @@ class MeasurementController extends AbstractController
                 content: new OA\JsonContent(
                     type: 'object',
                     properties: [
-                        new OA\Property(property: 'error', type: 'string', example: 'Missing fields: year, sensor_id, wine_id, ... Invalid fields: ...')
+                        new OA\Property(property: 'error', type: 'string', example: 'Validation Failed: Field [year] ..')
                     ]
                 )
             ),
