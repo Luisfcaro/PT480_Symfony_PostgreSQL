@@ -21,7 +21,7 @@ class MeasurementController extends AbstractController
     (
         MeasurementServiceInterface $measurementService,
         SerializerInterface $measurementSerializer,
-    ){
+    ) {
         $this->measurementService = $measurementService;
         $this->measurementSerializer = $measurementSerializer;
     }

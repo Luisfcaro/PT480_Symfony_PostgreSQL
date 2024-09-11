@@ -18,8 +18,7 @@ class MeasurementMapper
     public function __construct(
         SensorMapper $sensorMapper,
         WineMapper $wineMapper
-    )
-    {
+    ) {
         $this->sensorMapper = $sensorMapper;
         $this->wineMapper = $wineMapper;
     }

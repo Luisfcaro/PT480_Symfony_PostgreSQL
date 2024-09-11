@@ -27,8 +27,7 @@ class MeasurementService implements MeasurementServiceInterface
         WineRepository $wineRepository,
         MeasurementMapper $measurementMapper,
         EntityManagerInterface $entityManager
-    )
-    {
+    ) {
         $this->createMeasurementValidator = $createMeasurementValidator;
         $this->measurementRepository = $measurementRepository;
         $this->sensorRepository = $sensorRepository;
@@ -43,20 +42,17 @@ class MeasurementService implements MeasurementServiceInterface
 
         $sensor = $this->sensorRepository->findOneBy(['id' => $createMeasurementDTO->getSensorId()]);
 
-        if (!$sensor)
-        {
+        if (!$sensor) {
             throw new \Exception('Sensor referenced does not exists', 409);
         }
 
         $wine = $this->wineRepository->findOneBy(['id' => $createMeasurementDTO->getWineId()]);
 
-        if (!$wine)
-        {
+        if (!$wine) {
             throw new \Exception('Wine referenced does not exists', 409);
         }
 
-        if ($createMeasurementDTO->getYear() < $wine->getYear())
-        {
+        if ($createMeasurementDTO->getYear() < $wine->getYear()) {
             throw new \Exception('Year of measurement cant be before wine production year', 403);
         }
 
@@ -66,8 +62,7 @@ class MeasurementService implements MeasurementServiceInterface
             'year' => $createMeasurementDTO->getYear()
         ]);
 
-        if ($measurementExist)
-        {
+        if ($measurementExist) {
             throw new \Exception("There already exits a measurement with that sensor, on that wine and that year", 409);
         }
 

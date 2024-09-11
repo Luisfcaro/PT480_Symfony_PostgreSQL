@@ -18,7 +18,7 @@ class UserController extends AbstractController
 
     public function __construct(
         UserServiceInterface $userService
-    ){
+    ) {
         $this->userService = $userService;
     }
 
@@ -171,7 +171,7 @@ class UserController extends AbstractController
                 'token' => $bearer
             ], Response::HTTP_OK);
 
-        }catch(\Exception $e){
+        } catch(\Exception $e) {
             return new JsonResponse(['error' => $e->getMessage()], $e->getCode());
         }
     }

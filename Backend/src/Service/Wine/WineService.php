@@ -28,8 +28,7 @@ class WineService implements WineServiceInterface
         WineMeasurementMapper $wineMeasurementMapper,
         EntityManagerInterface $entityManager,
         // MeasurementMapper $measurementMapper
-    )
-    {
+    ) {
         $this->createWineValidator = $createWineValidator;
         $this->wineRepository = $wineRepository;
         $this->wineMapper = $wineMapper;
@@ -44,7 +43,7 @@ class WineService implements WineServiceInterface
 
         $wineExist = $this->wineRepository->findOneBy(['name' => $createWineDTO->getName(), 'year' => $createWineDTO->getYear()]);
 
-        if($wineExist){
+        if ($wineExist) {
             throw new \Exception("There already exists a wine with that name and year of production", 409);
         }
 

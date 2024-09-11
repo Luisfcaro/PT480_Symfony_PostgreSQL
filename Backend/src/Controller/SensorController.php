@@ -21,8 +21,7 @@ class SensorController extends AbstractController
     public function __construct(
         SensorServiceInterface $sensorService,
         SerializerInterface $sensorSerializer,
-    )
-    {
+    ) {
         $this->sensorService = $sensorService;
         $this->sensorSerializer = $sensorSerializer;
     }
@@ -250,7 +249,7 @@ class SensorController extends AbstractController
 
             $sensorsSerialized = [];
 
-            foreach($sensors as $sensor){
+            foreach ($sensors as $sensor) {
                 $sensorsSerialized[] = json_decode($this->sensorSerializer->serialize($sensor, 'json'));
             }
     

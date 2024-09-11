@@ -31,8 +31,7 @@ class UserService implements UserServiceInterface
         LogValidator $logValidator,
         UserMapper $userMapper,
         EntityManagerInterface $entityManager,
-    )
-    {
+    ) {
         $this->passwordHasher = $passwordHasher;
         $this->jwtEncoder = $jwtEncoder;
         $this->userRepository = $userRepository;
@@ -48,7 +47,7 @@ class UserService implements UserServiceInterface
 
         $userExist = $this->userRepository->findOneBy(['email' => $registerUserDTO->getEmail()]);
 
-        if ($userExist){
+        if ($userExist) {
             throw new \Exception('User with this mail already exists', 409);
         }
 

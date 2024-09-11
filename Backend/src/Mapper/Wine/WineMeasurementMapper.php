@@ -13,8 +13,7 @@ class WineMeasurementMapper
 
     public function __construct(
         MeasurementMapper $measurementMapper,
-    )
-    {
+    ) {
         $this->measurementMapper = $measurementMapper;
     }
 

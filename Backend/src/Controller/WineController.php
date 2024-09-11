@@ -20,7 +20,7 @@ class WineController extends AbstractController
     public function __construct(
         WineServiceInterface $wineService,
         SerializerInterface $wineSerializer,
-    ){
+    ) {
         $this->wineService = $wineService;
         $this->wineSerializer = $wineSerializer;
     }

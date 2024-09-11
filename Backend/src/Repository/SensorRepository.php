@@ -17,12 +17,9 @@ class SensorRepository extends ServiceEntityRepository
         parent::__construct($registry, Sensor::class);
     }
 
-//    /**
-//     * @return Sensor[] Returns an array of Sensor objects
-//     */
    public function findAllSensorByName(GetAllSensorByNameDTO $getAllSensorByNameDTO): array
    {
-        if ($getAllSensorByNameDTO->getOrder() == 0){
+        if ($getAllSensorByNameDTO->getOrder() == 0) {
             return $this->createQueryBuilder('s')
             ->orderBy('s.name', 'ASC')
             ->getQuery()

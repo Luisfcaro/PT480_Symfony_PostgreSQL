@@ -25,8 +25,7 @@ class SensorService implements SensorServiceInterface
         SensorMapper $sensorMapper,
         EntityManagerInterface $entityManager,
         GetAllSensorByNameValidator $getAllSensorByNameValidator,
-    )
-    {
+    ) {
         $this->createSensorValidator = $createSensorValidator;
         $this->sensorRepository = $sensorRepository;
         $this->sensorMapper = $sensorMapper;
