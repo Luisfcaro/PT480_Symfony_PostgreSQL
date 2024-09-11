@@ -5,7 +5,7 @@ namespace App\DTO\Sensor;
 class CreateSensorDTO
 {
     private ?int $id = null;
-    private string $name;
+    private ?string $name = null;
 
     public function getId(): ?int
     {
@@ -17,12 +17,12 @@ class CreateSensorDTO
         $this->id = $id;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }

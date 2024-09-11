@@ -7,7 +7,6 @@ class WineDTO
     private int $id;
     private string $name;
     private int $year;
-    private ?array $measurements;
 
     public function getId(): int
     {

@@ -18,9 +18,13 @@ class CreateWineValidator
     public function validateCreateWineData(CreateWineDTO $createWineDTO)
     {
         $constraints = new Assert\Collection([
-            'name' => [new Assert\NotBlank()],
+            'name' => [
+                new Assert\NotBlank(),
+                new Assert\NotNull(),
+            ],
             'year' => [
                 new Assert\NotBlank(),
+                new Assert\NotNull(),
                 new Assert\Type([
                     'type' => 'int',
                     'message' => 'Year has to be an {{ type }} value.'

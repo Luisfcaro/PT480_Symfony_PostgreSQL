@@ -22,6 +22,7 @@ class GetAllSensorByNameValidator
                 new Assert\NotBlank([
                     'message' => 'Order needs a value'
                 ]),
+                new Assert\NotNull(),
                 new Assert\Type([
                     'type' => 'numeric',
                     'message' => 'Order needs to be a {{ type }} value'

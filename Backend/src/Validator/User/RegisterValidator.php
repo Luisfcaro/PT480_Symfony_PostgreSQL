@@ -18,10 +18,23 @@ class RegisterValidator
     public function validateRegisterData(RegisterUserDTO $registerUserDTO)
     {
         $constraints = new Assert\Collection([
-            'email' => [new Assert\Email(), new Assert\NotBlank()],
-            'password' => [new Assert\NotBlank()],
-            'name' => [new Assert\NotBlank()],
-            'surname' => [new Assert\NotBlank()],
+            'email' => [
+                new Assert\Email(),
+                new Assert\NotBlank(),
+                new Assert\NotNull(),
+            ],
+            'password' => [
+                new Assert\NotBlank(),
+                new Assert\NotNull(),
+            ],
+            'name' => [
+                new Assert\NotBlank(),
+                new Assert\NotNull(),
+            ],
+            'surname' => [
+                new Assert\NotBlank(),
+                new Assert\NotNull(),
+            ],
         ]);
 
         $violations = $this->validator->validate([

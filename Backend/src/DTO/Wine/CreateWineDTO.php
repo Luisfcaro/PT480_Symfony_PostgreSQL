@@ -4,26 +4,26 @@ namespace App\DTO\Wine;
 
 class CreateWineDTO
 {
-    private string $name;
-    private int $year;
+    private ?string $name = null;
+    private ?int $year = null;
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
         return $this;
     }
 
-    public function getYear(): int
+    public function getYear(): ?int
     {
         return $this->year;
     }
 
-    public function setYear(int $year): self
+    public function setYear(?int $year): self
     {
         $this->year = $year;
         return $this;

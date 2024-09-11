@@ -18,7 +18,10 @@ class CreateSensorValidator
     public function validateCreateSensorData(CreateSensorDTO $createSensorDTO)
     {
         $constraints = new Assert\Collection([
-            'name' => [new Assert\NotBlank()],
+            'name' => [
+                new Assert\NotBlank(),
+                new Assert\NotNull(),
+        ],
         ]);
 
         $violations = $this->validator->validate([

@@ -17,8 +17,15 @@ class LogValidator {
     public function validateLoginData(LoginUserDTO $loginUserDTO)
     {
         $constraints = new Assert\Collection([
-            'email' => [new Assert\Email(), new Assert\NotBlank()],
-            'password' => [new Assert\NotBlank()],
+            'email' => [
+                new Assert\Email(),
+                new Assert\NotBlank(),
+                new Assert\NotNull(),
+            ],
+            'password' => [
+                new Assert\NotBlank(),
+                new Assert\NotNull(),
+            ],
         ]);
 
         $violations = $this->validator->validate([
