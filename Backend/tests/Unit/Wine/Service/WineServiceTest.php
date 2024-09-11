@@ -108,7 +108,7 @@ class WineServiceTest extends TestCase
             ->willReturn($wineEntity);
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("There already exits a wine with that name and year of production");
+        $this->expectExceptionMessage("There already exists a wine with that name and year of production");
 
         $this->wineService->createWine($createWineDTO);
     }

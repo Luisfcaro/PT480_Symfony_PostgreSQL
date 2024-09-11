@@ -36,8 +36,8 @@ class CreateMeasurementValidatorTest extends TestCase
 
     public function testYearIsBlank()
     {
-        $this->expectException(\TypeError::class);
-        // $this->expectExceptionMessage("Validation failed: Field '[year]': This value should not be blank.");
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Field '[year]': This value should not be null.");
 
         $dto = new CreateMeasurementDTO();
         $dto->setYear(null);
@@ -70,8 +70,8 @@ class CreateMeasurementValidatorTest extends TestCase
 
     public function testSensorIdIsBlank()
     {
-        $this->expectException(\TypeError::class);
-        // $this->expectExceptionMessage("Validation failed: Field '[sensorId]': This value should not be blank.");
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("Field '[sensorId]': This value should not be null.");
 
         $dto = new CreateMeasurementDTO();
         $dto->setYear(2024);
