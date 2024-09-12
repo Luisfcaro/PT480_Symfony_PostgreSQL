@@ -27,6 +27,9 @@ git clone https://github.com/Luisfcaro/PT480_Symfony_PostgreSQL.git
 
 Locate the pt480.sql file in the project directory. Import this SQL file into your PostgreSQL database. Before doing so, make sure to update the ALTER TABLE ... OWNER TO lines in the SQL file to match your PostgreSQL user.
 
+> [!IMPORTANT]
+> Remember to create a database named "DBname_test" with the same schema. (This database will be used by symfony to run the tests.)
+
 ### 2. Configure the Database Connection
 
 Update the .env file in the Backend directory with your PostgreSQL credentials. Set the DATABASE_URL as follows:
