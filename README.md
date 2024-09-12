@@ -9,7 +9,7 @@ Welcome to the PT480 Symfony PostgreSQL project. Follow the steps below to set u
 
 ## E-R Diagram
 
-https://raw.githubusercontent.com/Luisfcaro/PT480_Symfony_PostgreSQL/main/Backend/public/E-R_PT480.png
+![E-R Diagram image](Backend/public/E-R_PT480.png)
 
 This proyect has been coded with Symfony 7.1 and PHP 8.2
 
@@ -37,9 +37,10 @@ DATABASE_URL="postgresql://user:password@127.0.0.1:5432/pt480?serverVersion=16&c
 
 Replace user and password with your PostgreSQL username and password, respectively.
 
-## 3 Install Dependencies
+## 3. Install Dependencies
 
 Run the following command to install the project dependencies:
+
 ```bash
 cd Backend/
 ```
@@ -67,6 +68,20 @@ Once the server is running, you can view the API documentation:
 
 You can now interact with the API using tools like Postman to ensure everything is set up correctly. Once verified, you can integrate the API with your frontend application.
 
-## Contributing and Issues
+Or, you can run the test module using the command:
+
+-- Linux Command Line
+
+```bash
+php bin/phpunit ./tests/
+```
+
+-- Windows Command Line
+
+```bash
+php bin/phpunit .\tests\
+```
+
+## 💡 Contributing and Issues
 
 If you encounter any issues or have suggestions for improvements, please open an issue or make a contribution to the repository.
